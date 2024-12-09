@@ -11,6 +11,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.8.1",
     "next": "15.0.2",
     "react": "19.0.0-rc-02c0e824-20241028",
     "react-dom": "19.0.0-rc-02c0e824-20241028"
@@ -31,6 +32,7 @@
     "postcss": "^8",
     "prettier": "^3.3.3",
     "prettier-plugin-tailwindcss": "^0.6.8",
+    "prisma": "^6.0.1",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }
