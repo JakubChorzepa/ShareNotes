@@ -1,4 +1,5 @@
-/* eslint-disable prettier/prettier */
+import './globals.css';
+
 import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 
@@ -22,9 +23,7 @@ export default function RootLayout({
           <SidebarProvider>
             <AppSidebar />
             <SidebarTrigger />
-            <main>
-              {children}
-            </main>
+            <main>{children}</main>
           </SidebarProvider>
         </body>
       </html>
