@@ -1,4 +1,5 @@
-import { Calendar, Home, Inbox, Search, Settings } from 'lucide-react';
+import { Folder, FolderGit2, Home, type LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 import {
   Sidebar,
@@ -11,32 +12,27 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 
-// Menu items.
-const items = [
+type SidebarRoute = {
+  title: string;
+  url: string;
+  icon: LucideIcon;
+};
+
+const sidebarRoutes: SidebarRoute[] = [
   {
-    title: 'Home',
-    url: '#',
+    title: 'Strona główna',
+    url: '/',
     icon: Home,
   },
   {
-    title: 'Inbox',
+    title: 'Moje foldery',
     url: '#',
-    icon: Inbox,
+    icon: Folder,
   },
   {
-    title: 'Calendar',
+    title: 'Udostepnione dla mnie',
     url: '#',
-    icon: Calendar,
-  },
-  {
-    title: 'Search',
-    url: '#',
-    icon: Search,
-  },
-  {
-    title: 'Settings',
-    url: '#',
-    icon: Settings,
+    icon: FolderGit2,
   },
 ];
 
@@ -45,16 +41,16 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel>ShareNotes</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map(item => (
-                <SidebarMenuItem key={item.title}>
+              {sidebarRoutes.map(sidebarRoute => (
+                <SidebarMenuItem key={sidebarRoute.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
+                    <Link href={sidebarRoute.url}>
+                      <sidebarRoute.icon />
+                      <span>{sidebarRoute.title}</span>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

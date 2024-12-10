@@ -1,8 +1,11 @@
+import Link from 'next/link';
+
+import { Button } from '@/components/ui/button';
+
 export default function Page() {
   return (
-    <div className="flex flex-col content-center justify-center text-4xl text-pink-500">
-      Home xD
-      <p>✨ działa ✨</p>
+    <div className="flex flex-col content-center justify-center text-4xl">
+      Home
     </div>
   );
 }
