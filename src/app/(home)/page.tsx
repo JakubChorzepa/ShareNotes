@@ -100,8 +100,8 @@ export default function LandingPage() {
                   ⭐⭐⭐⭐⭐
                 </Badge>
                 <p className="italic text-gray-600">
-                  "Uwielbiam tworzyć foldery i udostępniać je swoim znajomym.
-                  Rewelacja!"
+                  "Świetne narzędzie do organizacji pracy grupowej. Idealne dla
+                  studentów. Polecam!"
                 </p>
                 <p className="mt-4 font-semibold text-green-500">- Piotr</p>
               </CardContent>
@@ -123,33 +123,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Sekcja Team */}
-      <section className="bg-gray-200 px-6 py-20 sm:px-12">
-        <div className="container mx-auto text-center">
-          <h2 className="mb-8 text-4xl font-extrabold text-gray-900">
-            Poznaj nasz zespół
-          </h2>
-          <div className="flex justify-center gap-8">
-            {/* Osoba 1 */}
-            <div className="flex flex-col items-center">
-              <div className="flex h-40 w-40 items-center justify-center rounded-full bg-gray-300 text-xl font-semibold">
-                <span>👨‍💻</span>
-              </div>
-              <p className="mt-4 text-xl font-bold">Jakub</p>
-              <p>Developer</p>
-            </div>
-            {/* Osoba 2 */}
-            <div className="flex flex-col items-center">
-              <div className="flex h-40 w-40 items-center justify-center rounded-full bg-gray-300 text-xl font-semibold">
-                <span>🎨</span>
-              </div>
-              <p className="mt-4 text-xl font-bold">Martna</p>
-              <p>Designer</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Sekcja CTA */}
       <section className="bg-blue-500 py-20 text-center text-white">
         <h2 className="mb-4 text-4xl font-extrabold">Gotowy na więcej?</h2>
@@ -159,6 +132,46 @@ export default function LandingPage() {
         <Button variant="ghost" className="bg-white text-blue-500">
           Zarejestruj się za darmo
         </Button>
+      </section>
+
+      {/* Sekcja Team */}
+      <section className="bg-gray-200 px-6 py-20 sm:px-12">
+        <div className="container mx-auto text-center">
+          <h2 className="mb-8 text-4xl font-extrabold text-gray-900">
+            Poznaj nasz zespół
+          </h2>
+          <div className="flex justify-center gap-8">
+            {/* Osoba 1 */}
+            <div className="flex flex-col items-center">
+              <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full bg-gray-300">
+                <img
+                  src="/images/avatar_j.png"
+                  alt="Jakub"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <p className="mt-4 text-xl font-bold">Jakub</p>
+            </div>
+            {/* Osoba 2 */}
+            <div className="flex flex-col items-center">
+              <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full bg-gray-300">
+                <img
+                  src="/images/avatar_m.png"
+                  alt="Martyna"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <p className="mt-4 text-xl font-bold">Martyna</p>
+            </div>
+          </div>
+          {/* Opis */}
+          <p className="mx-auto mt-6 max-w-3xl text-center text-lg text-gray-600">
+            Jesteśmy studentami kierunku Inżynieria i Analiza Danych na
+            Politechnice Rzeszowskiej. Naszym celem jest stworzenie aplikacji,
+            która ułatwi współpracę w grupach projektowych, zapewniając
+            intuicyjne narzędzia do organizacji i wymiany wiedzy.
+          </p>
+        </div>
       </section>
 
       {/* Sekcja Kontakt */}
@@ -242,7 +255,7 @@ export default function LandingPage() {
 
       {/* Stopka */}
       <footer className="bg-gray-900 py-6 text-center text-gray-300">
-        © {new Date().getFullYear()} ShareNotes. Wszystkie prawa zastrzeżone.
+        © {new Date().getFullYear()} ShareNotes.
       </footer>
     </div>
   );
