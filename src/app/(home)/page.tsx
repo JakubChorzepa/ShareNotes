@@ -23,10 +23,7 @@ export default function LandingPage() {
         </p>
         <div className="mt-10 flex gap-6">
           <Button variant="default" size="lg" asChild>
-            <a href="/sign-up">Zarejestruj się</a>
-          </Button>
-          <Button variant="outline" size="lg" asChild>
-            <a href="/sign-in">Zaloguj się</a>
+            <a href="/sign-up">Przejdź do aplikacji</a>
           </Button>
         </div>
       </section>
@@ -138,7 +135,7 @@ export default function LandingPage() {
               <div className="flex h-40 w-40 items-center justify-center rounded-full bg-gray-300 text-xl font-semibold">
                 <span>👨‍💻</span>
               </div>
-              <p className="mt-4 text-xl font-bold">Janek</p>
+              <p className="mt-4 text-xl font-bold">Jakub</p>
               <p>Developer</p>
             </div>
             {/* Osoba 2 */}
@@ -146,7 +143,7 @@ export default function LandingPage() {
               <div className="flex h-40 w-40 items-center justify-center rounded-full bg-gray-300 text-xl font-semibold">
                 <span>🎨</span>
               </div>
-              <p className="mt-4 text-xl font-bold">Anna</p>
+              <p className="mt-4 text-xl font-bold">Martna</p>
               <p>Designer</p>
             </div>
           </div>
