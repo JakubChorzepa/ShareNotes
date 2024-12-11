@@ -1,8 +1,9 @@
 import { type WebhookEvent } from '@clerk/nextjs/server';
+import { User } from '@prisma/client';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 
-import prisma from '@/lib/db';
+import { createUser } from '@/lib/users';
 
 export async function POST(request: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET;
@@ -52,27 +53,30 @@ export async function POST(request: Request) {
   const eventType = event.type;
 
   if (eventType === 'user.created') {
-    const { id, email_addresses } = event.data;
+    const { id, email_addresses, username } = event.data;
     const email = email_addresses[0]?.email_address;
 
-    if (email) {
-      try {
-        await prisma.user.create({
-          data: {
-            id,
-            email,
-          },
-        });
-
-        console.log('User added to database:', { id, email });
-      } catch (error) {
-        console.error('Error saving user to database:', error);
-        return new Response('Error saving user to database', {
-          status: 500,
-        });
-      }
+    if (!id || !email) {
+      return new Response('Error: Missing user data', {
+        status: 400,
+      });
     }
-    console.log('userId:', event.data.id);
+
+    const user = {
+      clerkUserId: id,
+      email: email,
+      username: username ?? null,
+    };
+
+    try {
+      await createUser(user as User);
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      return new Response(`Error: Could not create user: ${errorMessage}`, {
+        status: 500,
+      });
+    }
   }
 
   return new Response('Webhook received', { status: 200 });
