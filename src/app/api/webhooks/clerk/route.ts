@@ -1,9 +1,9 @@
-import { type WebhookEvent } from '@clerk/nextjs/server';
+import { clerkClient, type WebhookEvent } from '@clerk/nextjs/server';
 import { User } from '@prisma/client';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
 
-import { createUser } from '@/lib/users';
+import { createUser, deleteUserById, updateUserById } from '@/lib/users';
 
 export async function POST(request: Request) {
   const SIGNING_SECRET = process.env.SIGNING_SECRET;
@@ -14,29 +14,24 @@ export async function POST(request: Request) {
     );
   }
 
-  // Create new Svix instance with secret
   const wh = new Webhook(SIGNING_SECRET);
 
-  // Get headers
   const headerPayload = await headers();
   const svix_id = headerPayload.get('svix-id');
   const svix_timestamp = headerPayload.get('svix-timestamp');
   const svix_signature = headerPayload.get('svix-signature');
 
-  // If there are no headers, error out
   if (!svix_id || !svix_timestamp || !svix_signature) {
     return new Response('Error: Missing Svix headers', {
       status: 400,
     });
   }
 
-  // Get body
   const payload = await request.json();
   const body = JSON.stringify(payload);
 
   let event: WebhookEvent;
 
-  // Verify payload with headers
   try {
     event = wh.verify(body, {
       'svix-id': svix_id,
@@ -52,30 +47,86 @@ export async function POST(request: Request) {
 
   const eventType = event.type;
 
-  if (eventType === 'user.created') {
-    const { id, email_addresses, username } = event.data;
-    const email = email_addresses[0]?.email_address;
+  switch (eventType) {
+    case 'user.created': {
+      const { id, email_addresses, username } = event.data;
+      const email = email_addresses[0]?.email_address;
 
-    if (!id || !email) {
-      return new Response('Error: Missing user data', {
-        status: 400,
-      });
+      if (!id || !email) {
+        return new Response('Error: Missing user data', {
+          status: 400,
+        });
+      }
+
+      const user = {
+        clerkUserId: id,
+        email,
+        username: username ?? undefined,
+      };
+
+      try {
+        await createUser(user as User);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+        return new Response(`Error: Could not create user: ${errorMessage}`, {
+          status: 500,
+        });
+      }
+      break;
     }
 
-    const user = {
-      clerkUserId: id,
-      email: email,
-      username: username ?? null,
-    };
+    case 'user.updated': {
+      const { id, email_addresses, username } = event.data;
+      const email = email_addresses[0]?.email_address;
 
-    try {
-      await createUser(user as User);
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : 'Unknown error';
-      return new Response(`Error: Could not create user: ${errorMessage}`, {
-        status: 500,
-      });
+      if (!id) {
+        return new Response('Error: Missing user ID', {
+          status: 400,
+        });
+      }
+
+      const userUpdate = {
+        email,
+        username: username ?? undefined,
+      };
+
+      try {
+        await updateUserById({ clerkUserId: id }, userUpdate);
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+        return new Response(`Error: Could not update user: ${errorMessage}`, {
+          status: 500,
+        });
+      }
+      break;
+    }
+
+    case 'user.deleted': {
+      const { id } = event.data;
+
+      if (!id) {
+        return new Response('Error: Missing user ID', {
+          status: 400,
+        });
+      }
+
+      try {
+        await deleteUserById({ clerkUserId: id });
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Unknown error';
+        return new Response(`Error: Could not delete user: ${errorMessage}`, {
+          status: 500,
+        });
+      }
+      break;
+    }
+
+    default: {
+      console.warn(`Unhandled event type: ${eventType}`);
+      return new Response('Unhandled event type', { status: 400 });
     }
   }
 
