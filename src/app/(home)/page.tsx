@@ -1,3 +1,8 @@
+import { Folder, ShieldCheck, Users } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -5,8 +10,6 @@ import {
   CardDescription,
   CardTitle,
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Users, Folder, ShieldCheck } from 'lucide-react';
 
 export default function LandingPage() {
   return (
@@ -23,7 +26,7 @@ export default function LandingPage() {
         </p>
         <div className="mt-10 flex gap-6">
           <Button variant="default" size="lg" asChild>
-            <a href="/sign-up">Przejdź do aplikacji</a>
+            <Link href="/dashboard">Przejdź do aplikacji</Link>
           </Button>
         </div>
       </section>
@@ -88,8 +91,8 @@ export default function LandingPage() {
                   ⭐⭐⭐⭐⭐
                 </Badge>
                 <p className="italic text-gray-600">
-                  "Najlepsze narzędzie do pracy zespołowej. Intuicyjne i
-                  bezpieczne."
+                  &quot;Najlepsze narzędzie do pracy zespołowej. Intuicyjne i
+                  bezpieczne.&quot;
                 </p>
                 <p className="mt-4 font-semibold text-blue-500">- Marta</p>
               </CardContent>
@@ -100,8 +103,8 @@ export default function LandingPage() {
                   ⭐⭐⭐⭐⭐
                 </Badge>
                 <p className="italic text-gray-600">
-                  "Świetne narzędzie do organizacji pracy grupowej. Idealne dla
-                  studentów. Polecam!"
+                  &quot;Świetne narzędzie do organizacji pracy grupowej. Idealne
+                  dla studentów. Polecam!&quot;
                 </p>
                 <p className="mt-4 font-semibold text-green-500">- Piotr</p>
               </CardContent>
@@ -112,7 +115,8 @@ export default function LandingPage() {
                   ⭐⭐⭐⭐⭐
                 </Badge>
                 <p className="italic text-gray-600">
-                  "Bezpieczeństwo na pierwszym miejscu. Jestem zachwycona!"
+                  &quot;Bezpieczeństwo na pierwszym miejscu. Jestem
+                  zachwycona!&quot;
                 </p>
                 <p className="mt-4 font-semibold text-yellow-500">
                   - Katarzyna
@@ -130,7 +134,7 @@ export default function LandingPage() {
           Dołącz już teraz i odkryj pełnię możliwości!
         </p>
         <Button variant="ghost" className="bg-white text-blue-500">
-          Zarejestruj się za darmo
+          <Link href="/sign-up">Zarejestruj się za darmo</Link>
         </Button>
       </section>
 
@@ -144,10 +148,12 @@ export default function LandingPage() {
             {/* Osoba 1 */}
             <div className="flex flex-col items-center">
               <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full bg-gray-300">
-                <img
-                  src="/images/avatar_j.png"
+                <Image
+                  src="/images/avatar_jakub.png"
                   alt="Jakub"
                   className="h-full w-full object-cover"
+                  width={200}
+                  height={200}
                 />
               </div>
               <p className="mt-4 text-xl font-bold">Jakub</p>
@@ -155,10 +161,12 @@ export default function LandingPage() {
             {/* Osoba 2 */}
             <div className="flex flex-col items-center">
               <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full bg-gray-300">
-                <img
-                  src="/images/avatar_m.png"
+                <Image
+                  src="/images/avatar_martyna.png"
                   alt="Martyna"
                   className="h-full w-full object-cover"
+                  height={200}
+                  width={200}
                 />
               </div>
               <p className="mt-4 text-xl font-bold">Martyna</p>

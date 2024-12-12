@@ -1,9 +1,12 @@
+import { SignedIn, UserButton } from '@clerk/nextjs';
+import { currentUser } from '@clerk/nextjs/server';
 import { Folder, FolderGit2, Home, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -36,7 +39,9 @@ const sidebarRoutes: SidebarRoute[] = [
   },
 ];
 
-export function AppSidebar() {
+export async function AppSidebar() {
+  const user = await currentUser();
+
   return (
     <Sidebar>
       <SidebarContent>
@@ -58,6 +63,13 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+      <SidebarFooter>
+        <SignedIn>
+          <div className="flex h-full w-full flex-row content-center items-center gap-2 p-4">
+            <UserButton showName />
+          </div>
+        </SignedIn>
+      </SidebarFooter>
     </Sidebar>
   );
 }
