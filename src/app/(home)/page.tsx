@@ -2,6 +2,8 @@ import { Folder, ShieldCheck, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
+import jakubAvatar from '@/assets/images/avatar_jakub.png';
+import martynaAvatar from '@/assets/images/avatar_martyna.png';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
@@ -13,7 +15,7 @@ import {
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-pink-100 via-blue-50 to-blue-200 text-gray-800">
+    <div className="min-h-screen w-full bg-gradient-to-tr from-pink-100 via-blue-50 to-blue-200 text-gray-800">
       {/* Sekcja Główna */}
       <section className="relative flex flex-col items-center justify-center overflow-hidden px-6 py-20 sm:px-12">
         <h1 className="text-7xl font-extrabold text-gray-900 drop-shadow-md">
@@ -149,7 +151,7 @@ export default function LandingPage() {
             <div className="flex flex-col items-center">
               <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full bg-gray-300">
                 <Image
-                  src="/images/avatar_jakub.png"
+                  src={jakubAvatar}
                   alt="Jakub"
                   className="h-full w-full object-cover"
                   width={200}
@@ -162,7 +164,7 @@ export default function LandingPage() {
             <div className="flex flex-col items-center">
               <div className="flex h-40 w-40 items-center justify-center overflow-hidden rounded-full bg-gray-300">
                 <Image
-                  src="/images/avatar_martyna.png"
+                  src={martynaAvatar}
                   alt="Martyna"
                   className="h-full w-full object-cover"
                   height={200}

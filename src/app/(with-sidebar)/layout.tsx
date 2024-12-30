@@ -1,3 +1,5 @@
+import { Protect } from '@clerk/nextjs';
+
 import { AppSidebar } from '@/components/AppSidebar/app-sidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
@@ -7,10 +9,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarTrigger />
-      <div>{children}</div>
-    </SidebarProvider>
+    <Protect>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarTrigger />
+        <div>{children}</div>
+      </SidebarProvider>
+    </Protect>
   );
 }
