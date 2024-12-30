@@ -1,5 +1,4 @@
 import { SignedIn, UserButton } from '@clerk/nextjs';
-import { currentUser } from '@clerk/nextjs/server';
 import { Folder, FolderGit2, Home, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 
@@ -40,8 +39,6 @@ const sidebarRoutes: SidebarRoute[] = [
 ];
 
 export async function AppSidebar() {
-  const user = await currentUser();
-
   return (
     <Sidebar>
       <SidebarContent>
