@@ -1,3 +1,4 @@
+import { useUser } from '@clerk/nextjs';
 import { Folder, ShieldCheck, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,7 +29,7 @@ export default function LandingPage() {
         </p>
         <div className="mt-10 flex gap-6">
           <Button variant="default" size="lg" asChild>
-            <Link href="/dashboard">Przejdź do aplikacji</Link>
+            <Link href="/owned-folders">Przejdź do aplikacji</Link>
           </Button>
         </div>
       </section>

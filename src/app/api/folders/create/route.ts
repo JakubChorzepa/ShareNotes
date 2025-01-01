@@ -15,6 +15,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
+  const userExists = await prisma.user.findUnique({
+    where: { clerkUserId: userId },
+  });
+
+  if (!userExists) {
+    return NextResponse.json(
+      { error: 'User not found in database' },
+      { status: 404 },
+    );
+  }
+
   const { name, password }: CreateFolderRequest = await request.json();
 
   const folder = await prisma.folder.create({
