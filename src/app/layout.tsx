@@ -21,7 +21,7 @@ export default function RootLayout({
       signUpUrl="/sign-up"
       localization={plPL}
     >
-      <html lang="en">
+      <html lang="en" suppressHydrationWarning>
         <body>
           <main className="flex min-h-screen items-center justify-center">
             {children}

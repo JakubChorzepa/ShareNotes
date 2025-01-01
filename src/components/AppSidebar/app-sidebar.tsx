@@ -8,7 +8,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -41,9 +41,9 @@ const sidebarRoutes: SidebarRoute[] = [
 export async function AppSidebar() {
   return (
     <Sidebar>
+      <SidebarHeader>ShareNotes</SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>ShareNotes</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarRoutes.map(sidebarRoute => (
