@@ -1,11 +1,12 @@
-import { SignedIn, UserButton } from '@clerk/nextjs';
+'use client';
+
 import { Folder, FolderGit2, Home, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarHeader,
@@ -28,7 +29,7 @@ const sidebarRoutes: SidebarRoute[] = [
   },
   {
     title: 'Moje foldery',
-    url: '#',
+    url: '/owned-folders',
     icon: Folder,
   },
   {
@@ -38,35 +39,41 @@ const sidebarRoutes: SidebarRoute[] = [
   },
 ];
 
-export async function AppSidebar() {
+export function AppSidebar() {
+  const pathname = usePathname();
+
   return (
     <Sidebar>
-      <SidebarHeader>ShareNotes</SidebarHeader>
+      <SidebarHeader className="px-4 py-4 font-semibold">
+        ShareNotes
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {sidebarRoutes.map(sidebarRoute => (
-                <SidebarMenuItem key={sidebarRoute.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={sidebarRoute.url}>
-                      <sidebarRoute.icon />
-                      <span>{sidebarRoute.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+            <SidebarMenu className="gap-2">
+              {sidebarRoutes.map(route => {
+                const isActive = pathname === route.url;
+
+                return (
+                  <SidebarMenuItem key={route.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={`flex w-full items-center gap-2 rounded-md p-2 ${
+                        isActive ? 'bg-gray-200' : 'hover:bg-gray-100'
+                      }`}
+                    >
+                      <Link href={route.url}>
+                        <route.icon />
+                        <span>{route.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SignedIn>
-          <div className="flex h-full w-full flex-row content-center items-center gap-2 p-4">
-            <UserButton showName />
-          </div>
-        </SignedIn>
-      </SidebarFooter>
     </Sidebar>
   );
 }
