@@ -1,3 +1,5 @@
+'use client';
+
 import { SignedIn, UserButton } from '@clerk/nextjs';
 
 import { AppSidebar } from '@/components/AppSidebar/app-sidebar';

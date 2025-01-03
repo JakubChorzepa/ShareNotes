@@ -1,4 +1,5 @@
 import { auth } from '@clerk/nextjs/server';
+import { hash } from 'bcryptjs';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/db';
@@ -28,10 +29,19 @@ export async function POST(request: Request) {
 
   const { name, password }: CreateFolderRequest = await request.json();
 
+  if (!name || name.length > 50) {
+    return NextResponse.json(
+      { error: 'Folder name must be between 1 and 50 characters long' },
+      { status: 400 },
+    );
+  }
+
+  const hashedPassword = password ? await hash(password, 10) : undefined;
+
   const folder = await prisma.folder.create({
     data: {
       name,
-      password,
+      password: hashedPassword,
       ownerId: userId,
     },
   });

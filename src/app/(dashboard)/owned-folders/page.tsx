@@ -4,7 +4,7 @@ import { Folder } from '@prisma/client';
 import { useEffect, useState } from 'react';
 
 import { FolderList } from '@/components/Folders/folders-list';
-import { NewFolderDialog } from '@/components/Folders/new-folder-dialog';
+import { NewFolderDialog } from '@/components/Folders/NewFolderDialog/new-folder-dialog';
 
 function OwnedFoldersPage() {
   const [folders, setFolders] = useState<Folder[]>([]);
@@ -35,7 +35,7 @@ function OwnedFoldersPage() {
     <div className="flex flex-col justify-center gap-8 py-4">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-bold md:text-2xl">Moje foldery</h1>
-        <NewFolderDialog onAddFolder={handleAddFolder} />
+        <NewFolderDialog onFolderAdded={() => handleAddFolder} />
       </div>
       <FolderList folders={folders} />
     </div>
