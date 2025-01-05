@@ -1,5 +1,6 @@
 import { Folder } from '@prisma/client';
 import { useCallback, useState } from 'react';
+import { toast } from 'sonner';
 
 import { FolderFormValues } from '@/components/Folders/NewFolderDialog/validation';
 
@@ -36,13 +37,22 @@ export const useFolders = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create folder');
+        toast.error('Coś poszło nie tak', {
+          description: 'Wystąpił nieoczekiwany problem przy dodawaniu folderu',
+        });
+
+        throw new Error('Failed to add folder');
       }
+
+      toast.success('Folder został dodany pomyślnie');
 
       const newFolder = await response.json();
       setFolders(previousFolders => [newFolder, ...previousFolders]);
     } catch (error) {
       console.error('Error while adding folder:', error);
+      toast.error('Coś poszło nie tak', {
+        description: 'Wystąpił nieoczekiwany problem przy dodawaniu folderu',
+      });
     }
   }, []);
 
