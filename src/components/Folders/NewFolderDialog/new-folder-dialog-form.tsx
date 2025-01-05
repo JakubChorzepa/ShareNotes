@@ -1,7 +1,8 @@
 'use client';
 
+import autoAnimate from '@formkit/auto-animate';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,7 @@ export const NewFolderDialogForm = ({ onSubmit }: NewFolderDialogFormProps) => {
   } = useForm<FolderFormValues>({
     resolver: zodResolver(folderSchema),
   });
+  const animateParent = useRef(null);
 
   const isPasswordProtected = watch('isPasswordProtected');
 
@@ -32,8 +34,16 @@ export const NewFolderDialogForm = ({ onSubmit }: NewFolderDialogFormProps) => {
     setValue('isPasswordProtected', false);
   }, [setValue]);
 
+  useEffect(() => {
+    animateParent.current && autoAnimate(animateParent.current);
+  }, [animateParent]);
+
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="space-y-4"
+      onSubmit={handleSubmit(onSubmit)}
+      ref={animateParent}
+    >
       <div>
         <Input placeholder="Nazwa folderu" {...register('name')} />
         {errors.name && (
@@ -45,10 +55,19 @@ export const NewFolderDialogForm = ({ onSubmit }: NewFolderDialogFormProps) => {
           name="isPasswordProtected"
           control={control}
           render={({ field }) => (
-            <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+            <Checkbox
+              id="isPasswordProtectedCheckbox"
+              checked={field.value}
+              onCheckedChange={field.onChange}
+            />
           )}
         />
-        <label htmlFor="isPasswordProtected">Zabezpiecz folder hasłem</label>
+        <label
+          htmlFor="isPasswordProtectedCheckbox"
+          className="font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        >
+          Zabezpiecz folder hasłem
+        </label>
       </div>
       {isPasswordProtected && (
         <div>
