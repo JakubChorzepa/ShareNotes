@@ -1,13 +1,12 @@
 'use client';
 
-import { Folder } from '@prisma/client';
+import { CirclePlus } from 'lucide-react';
 import { useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
@@ -16,31 +15,22 @@ import { NewFolderDialogForm } from './new-folder-dialog-form';
 import { FolderFormValues } from './validation';
 
 type NewFolderDialogProps = {
-  onFolderAdded: (folder: Folder) => void;
+  addFolderHandler: (data: FolderFormValues) => void;
 };
 
-export const NewFolderDialog = ({ onFolderAdded }: NewFolderDialogProps) => {
+export const NewFolderDialog = ({ addFolderHandler }: NewFolderDialogProps) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onSubmit = async (data: FolderFormValues) => {
-    const response = await fetch('/api/folders/create', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-      const newFolder = await response.json();
-      onFolderAdded(newFolder);
-      setIsOpen(false);
-    } else {
-      console.error('Nie udało się dodać folderu');
-    }
+    await addFolderHandler(data);
+    setIsOpen(false);
   };
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Dodaj folder</Button>
+      <Button onClick={() => setIsOpen(true)}>
+        Dodaj folder <CirclePlus />
+      </Button>
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent>
           <DialogHeader>

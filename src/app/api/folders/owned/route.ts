@@ -12,6 +12,7 @@ export async function GET() {
   const folders = await prisma.folder.findMany({
     where: { ownerId: userId },
     include: { notes: true, sharedUsers: true },
+    orderBy: { updatedAt: 'desc' },
   });
 
   return NextResponse.json(folders, { status: 200 });
