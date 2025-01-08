@@ -2,6 +2,7 @@ import { auth } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 import prisma from '@/lib/db';
+import { FolderWithNoteCount } from '@/types/folder';
 
 export async function GET() {
   const { userId } = await auth();
@@ -15,5 +16,10 @@ export async function GET() {
     orderBy: { updatedAt: 'desc' },
   });
 
-  return NextResponse.json(folders, { status: 200 });
+  const foldersWithNoteCount: FolderWithNoteCount[] = folders.map(folder => ({
+    ...folder,
+    noteCount: folder.notes.length,
+  }));
+
+  return NextResponse.json(foldersWithNoteCount, { status: 200 });
 }

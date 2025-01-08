@@ -1,12 +1,13 @@
 import autoAnimate from '@formkit/auto-animate';
-import { Folder } from '@prisma/client';
 import { Frown, Loader2 } from 'lucide-react';
 import { useEffect, useRef } from 'react';
+
+import { FolderWithNoteCount } from '@/types/folder';
 
 import { FolderCard } from './folder-card';
 
 type FolderListProps = {
-  folders: Folder[];
+  folders: FolderWithNoteCount[];
   isLoading: boolean;
   error?: string;
 };
@@ -66,7 +67,7 @@ export const FolderList = ({ folders, isLoading, error }: FolderListProps) => {
   return (
     <div
       ref={parentRef}
-      className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
+      className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
     >
       {folders.map(folder => (
         <FolderCard key={folder.id} folder={folder} />

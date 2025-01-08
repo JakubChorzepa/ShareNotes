@@ -1,11 +1,11 @@
-import { Folder } from '@prisma/client';
 import { useCallback, useState } from 'react';
 import { toast } from 'sonner';
 
 import { FolderFormValues } from '@/components/Folders/NewFolderDialog/validation';
+import { FolderWithNoteCount } from '@/types/folder';
 
 export const useFolders = () => {
-  const [folders, setFolders] = useState<Folder[]>([]);
+  const [folders, setFolders] = useState<FolderWithNoteCount[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | undefined>();
 
