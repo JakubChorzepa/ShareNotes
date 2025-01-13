@@ -25,9 +25,9 @@ export const FolderCard = ({ folder }: FolderCardProps) => {
   };
 
   return (
-    <div className="relative flex flex-col justify-between rounded-md border p-4">
-      <h3 className="text-lg font-bold">{folder.name}</h3>
+    <div className="relative flex flex-row justify-between rounded-md border p-4">
       <div className="flex flex-col text-[10px] text-gray-700 opacity-80">
+        <h3 className="text-lg font-bold">{folder.name}</h3>
         <div className="flex items-center">
           <EllipsisText
             text={`ID: ${folder.id}`}
@@ -55,8 +55,11 @@ export const FolderCard = ({ folder }: FolderCardProps) => {
         </span>
         <span className="text-[10px]">Notatki: {folder.noteCount}</span>
       </div>
-      <Link href={`/folder/${folder.id}`}>
-        <Button className="absolute bottom-0 right-0 h-full">
+      <Link
+        href={`/folder/${folder.id}`}
+        className="flex items-end justify-center"
+      >
+        <Button className="p-2">
           <LogIn />
         </Button>
       </Link>

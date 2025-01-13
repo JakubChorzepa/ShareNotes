@@ -32,5 +32,5 @@ export async function PATCH(
     data: { name: name, password: password },
   });
 
-  return NextResponse.json(folder, { status: 200 });
+  return NextResponse.json(updatedFolder, { status: 200 });
 }
