@@ -1,10 +1,12 @@
 import autoAnimate from '@formkit/auto-animate';
 import { Frown, Loader2 } from 'lucide-react';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { FolderWithNoteCount } from '@/types/folder';
+import { TruncatedUserData } from '@/types/user';
 
 import { FolderCard } from './folder-card';
+import { ShareFolderModal } from './ShareFolderModal/share-folder-dialog';
 
 type FolderListProps = {
   folders: FolderWithNoteCount[];
@@ -13,6 +15,12 @@ type FolderListProps = {
 };
 
 export const FolderList = ({ folders, isLoading, error }: FolderListProps) => {
+  const [isShareDialogOpen, setShareDialogOpen] = useState(false);
+  const [selectedFolderId, setSelectedFolderId] = useState<
+    string | undefined
+  >();
+  const [users, setUsers] = useState<TruncatedUserData[]>([]);
+
   const parentRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -20,6 +28,21 @@ export const FolderList = ({ folders, isLoading, error }: FolderListProps) => {
       autoAnimate(parentRef.current);
     }
   }, [parentRef]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const response = await fetch('/api/users');
+      const data = await response.json();
+      setUsers(data);
+    };
+
+    fetchUsers();
+  }, []);
+
+  const openDialog = (folderId: string) => {
+    setSelectedFolderId(folderId);
+    setShareDialogOpen(true);
+  };
 
   if (isLoading) {
     return (
@@ -65,13 +88,25 @@ export const FolderList = ({ folders, isLoading, error }: FolderListProps) => {
   }
 
   return (
-    <div
-      ref={parentRef}
-      className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
-    >
-      {folders.map(folder => (
-        <FolderCard key={folder.id} folder={folder} />
-      ))}
-    </div>
+    <>
+      <div
+        ref={parentRef}
+        className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+      >
+        {folders.map(folder => (
+          <FolderCard
+            key={folder.id}
+            folder={folder}
+            onOpenShareDialog={openDialog}
+          />
+        ))}
+      </div>
+      <ShareFolderModal
+        isOpen={isShareDialogOpen}
+        folderId={selectedFolderId}
+        users={users}
+        setShareDialogOpen={setShareDialogOpen}
+      />
+    </>
   );
 };

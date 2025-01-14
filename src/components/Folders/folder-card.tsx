@@ -1,6 +1,6 @@
 'use client';
 
-import { Copy, LogIn } from 'lucide-react';
+import { Copy, EllipsisVertical, LogIn } from 'lucide-react';
 import Link from 'next/link';
 import { toast } from 'sonner';
 
@@ -16,9 +16,10 @@ import { FolderWithNoteCount } from '@/types/folder';
 
 type FolderCardProps = {
   folder: FolderWithNoteCount;
+  onOpenShareDialog: (folderId: string) => void;
 };
 
-export const FolderCard = ({ folder }: FolderCardProps) => {
+export const FolderCard = ({ folder, onOpenShareDialog }: FolderCardProps) => {
   const handleCopyId = () => {
     navigator.clipboard.writeText(folder.id);
     toast.success('Skopiowano identyfikator folderu do schowka');
@@ -26,43 +27,52 @@ export const FolderCard = ({ folder }: FolderCardProps) => {
 
   return (
     <div className="relative flex flex-row justify-between rounded-md border p-4">
-      <div className="flex flex-col text-[10px] text-gray-700 opacity-80">
+      <div className="flex flex-col text-[10px] text-foreground">
         <h3 className="text-lg font-bold">{folder.name}</h3>
-        <div className="flex items-center">
-          <EllipsisText
-            text={`ID: ${folder.id}`}
-            className="mr-1"
-            maxLength={25}
-          />
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="px-2 text-gray-700 hover:text-black"
-                  onClick={handleCopyId}
-                >
-                  <Copy />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>Skopiuj ID</TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+        <div className="flex flex-col opacity-60">
+          <div className="flex items-center">
+            <EllipsisText
+              text={`ID: ${folder.id}`}
+              className="mr-1"
+              maxLength={25}
+            />
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="px-2 text-gray-700 hover:text-black"
+                    onClick={handleCopyId}
+                  >
+                    <Copy />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>Skopiuj ID</TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          </div>
+          <span className="-mt-1 text-[10px]">
+            Utworzono: {new Date(folder.createdAt).toLocaleDateString()}
+          </span>
+          <span className="text-[10px]">Notatki: {folder.noteCount}</span>
         </div>
-        <span className="-mt-1 text-[10px]">
-          Utworzono: {new Date(folder.createdAt).toLocaleDateString()}
-        </span>
-        <span className="text-[10px]">Notatki: {folder.noteCount}</span>
       </div>
-      <Link
-        href={`/folder/${folder.id}`}
-        className="flex items-end justify-center"
-      >
-        <Button className="p-2">
-          <LogIn />
+
+      <div className="flex flex-col content-center justify-between">
+        <Button
+          variant={'ghost'}
+          className="flex content-center justify-center p-1"
+          onClick={() => onOpenShareDialog(folder.id)}
+        >
+          <EllipsisVertical size={21} />
         </Button>
-      </Link>
+        <Link href={`/folder/${folder.id}`}>
+          <Button className="p-2">
+            <LogIn />
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };

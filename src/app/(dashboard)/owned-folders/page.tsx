@@ -17,7 +17,7 @@ function OwnedFoldersPage() {
 
   return (
     <div className="flex flex-col justify-center gap-8 py-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
         <h1 className="text-xl font-bold md:text-2xl">Moje foldery</h1>
         <div className="flex justify-center gap-2">
           <Button variant="outline" onClick={loadFolders}>
