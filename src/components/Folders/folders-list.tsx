@@ -32,12 +32,22 @@ export const FolderList = ({ folders, isLoading, error }: FolderListProps) => {
   useEffect(() => {
     const fetchUsers = async () => {
       const response = await fetch('/api/users');
-      const data = await response.json();
-      setUsers(data);
+      const usersData = await response.json();
+
+      const excludedFolderOwnerUsers = usersData.filter(
+        (usersData: TruncatedUserData) => {
+          return !folders.some(
+            (folder: FolderWithNoteCount) =>
+              folder.ownerId === usersData.clerkUserId,
+          );
+        },
+      );
+
+      setUsers(excludedFolderOwnerUsers);
     };
 
     fetchUsers();
-  }, []);
+  }, [folders]);
 
   const openDialog = (folderId: string) => {
     setSelectedFolderId(folderId);

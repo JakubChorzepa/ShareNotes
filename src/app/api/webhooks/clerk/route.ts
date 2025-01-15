@@ -1,4 +1,4 @@
-import { clerkClient, type WebhookEvent } from '@clerk/nextjs/server';
+import { type WebhookEvent } from '@clerk/nextjs/server';
 import { User } from '@prisma/client';
 import { headers } from 'next/headers';
 import { Webhook } from 'svix';
@@ -49,10 +49,10 @@ export async function POST(request: Request) {
 
   switch (eventType) {
     case 'user.created': {
-      const { id, email_addresses, username } = event.data;
+      const { id, email_addresses, username, image_url } = event.data;
       const email = email_addresses[0]?.email_address;
 
-      if (!id || !email) {
+      if (!id || !email || !username || !image_url) {
         return new Response('Error: Missing user data', {
           status: 400,
         });
@@ -61,7 +61,8 @@ export async function POST(request: Request) {
       const user = {
         clerkUserId: id,
         email,
-        username: username ?? undefined,
+        username: username,
+        avatarUrl: image_url,
       };
 
       try {
@@ -77,7 +78,7 @@ export async function POST(request: Request) {
     }
 
     case 'user.updated': {
-      const { id, email_addresses, username } = event.data;
+      const { id, email_addresses, username, image_url } = event.data;
       const email = email_addresses[0]?.email_address;
 
       if (!id) {
@@ -88,7 +89,8 @@ export async function POST(request: Request) {
 
       const userUpdate = {
         email,
-        username: username ?? undefined,
+        username: username || undefined,
+        avatarUrl: image_url || undefined,
       };
 
       try {

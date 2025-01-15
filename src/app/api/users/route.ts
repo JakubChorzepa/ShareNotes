@@ -16,6 +16,7 @@ export async function GET() {
       clerkUserId: true,
       email: true,
       username: true,
+      avatarUrl: true,
     },
   });
 
