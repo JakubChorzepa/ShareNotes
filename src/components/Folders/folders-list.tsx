@@ -12,9 +12,15 @@ type FolderListProps = {
   folders: FolderWithNoteCount[];
   isLoading: boolean;
   error?: string;
+  areFoldersEditable: boolean;
 };
 
-export const FolderList = ({ folders, isLoading, error }: FolderListProps) => {
+export const FolderList = ({
+  folders,
+  isLoading,
+  error,
+  areFoldersEditable,
+}: FolderListProps) => {
   const [isShareDialogOpen, setShareDialogOpen] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<
     string | undefined
@@ -108,6 +114,7 @@ export const FolderList = ({ folders, isLoading, error }: FolderListProps) => {
             key={folder.id}
             folder={folder}
             onOpenShareDialog={openDialog}
+            isEditable={areFoldersEditable}
           />
         ))}
       </div>

@@ -17,9 +17,14 @@ import { FolderWithNoteCount } from '@/types/folder';
 type FolderCardProps = {
   folder: FolderWithNoteCount;
   onOpenShareDialog: (folderId: string) => void;
+  isEditable: boolean;
 };
 
-export const FolderCard = ({ folder, onOpenShareDialog }: FolderCardProps) => {
+export const FolderCard = ({
+  folder,
+  onOpenShareDialog,
+  isEditable,
+}: FolderCardProps) => {
   const handleCopyId = () => {
     navigator.clipboard.writeText(folder.id);
     toast.success('Skopiowano identyfikator folderu do schowka');
@@ -59,14 +64,18 @@ export const FolderCard = ({ folder, onOpenShareDialog }: FolderCardProps) => {
         </div>
       </div>
 
-      <div className="flex flex-col content-center justify-between">
-        <Button
-          variant={'ghost'}
-          className="flex content-center justify-center p-1"
-          onClick={() => onOpenShareDialog(folder.id)}
-        >
-          <EllipsisVertical size={21} />
-        </Button>
+      <div
+        className={`flex flex-col content-center ${isEditable ? 'justify-between' : 'justify-end'}`}
+      >
+        {isEditable && (
+          <Button
+            variant={'ghost'}
+            className="flex content-center justify-center p-1"
+            onClick={() => onOpenShareDialog(folder.id)}
+          >
+            <EllipsisVertical size={21} />
+          </Button>
+        )}
         <Link href={`/folder/${folder.id}`}>
           <Button className="p-2">
             <LogIn />

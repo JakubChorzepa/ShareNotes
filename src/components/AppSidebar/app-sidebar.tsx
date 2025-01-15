@@ -34,7 +34,7 @@ const sidebarRoutes: SidebarRoute[] = [
   },
   {
     title: 'Udostepnione dla mnie',
-    url: '#',
+    url: '/shared-folders',
     icon: FolderGit2,
   },
 ];

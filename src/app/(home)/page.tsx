@@ -1,4 +1,4 @@
-import { useUser } from '@clerk/nextjs';
+import { SignedOut, useUser } from '@clerk/nextjs';
 import { Folder, ShieldCheck, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -136,9 +136,11 @@ export default function LandingPage() {
         <p className="mb-8 text-lg font-light">
           Dołącz już teraz i odkryj pełnię możliwości!
         </p>
-        <Button variant="ghost" className="bg-white text-blue-500">
-          <Link href="/sign-up">Zarejestruj się za darmo</Link>
-        </Button>
+        <SignedOut>
+          <Button variant="ghost" className="bg-white text-blue-500">
+            <Link href="/sign-up">Zarejestruj się za darmo</Link>
+          </Button>
+        </SignedOut>
       </section>
 
       {/* Sekcja Team */}
