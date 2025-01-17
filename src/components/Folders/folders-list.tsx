@@ -1,6 +1,6 @@
 import autoAnimate from '@formkit/auto-animate';
 import { Frown, Loader2 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { FolderWithNoteCount } from '@/types/folder';
 import { TruncatedUserData } from '@/types/user';
@@ -13,6 +13,7 @@ type FolderListProps = {
   isLoading: boolean;
   error?: string;
   areFoldersEditable: boolean;
+  loadFolders: () => void;
 };
 
 export const FolderList = ({
@@ -20,6 +21,7 @@ export const FolderList = ({
   isLoading,
   error,
   areFoldersEditable,
+  loadFolders,
 }: FolderListProps) => {
   const [isShareDialogOpen, setShareDialogOpen] = useState(false);
   const [selectedFolderId, setSelectedFolderId] = useState<
@@ -35,25 +37,25 @@ export const FolderList = ({
     }
   }, [parentRef]);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const response = await fetch('/api/users');
-      const usersData = await response.json();
+  const fetchUsers = useCallback(async () => {
+    const response = await fetch('/api/users');
+    const usersData = await response.json();
 
-      const excludedFolderOwnerUsers = usersData.filter(
-        (usersData: TruncatedUserData) => {
-          return !folders.some(
-            (folder: FolderWithNoteCount) =>
-              folder.ownerId === usersData.clerkUserId,
-          );
-        },
-      );
+    const excludedFolderOwnerUsers = usersData.filter(
+      (usersData: TruncatedUserData) => {
+        return !folders.some(
+          (folder: FolderWithNoteCount) =>
+            folder.ownerId === usersData.clerkUserId,
+        );
+      },
+    );
 
-      setUsers(excludedFolderOwnerUsers);
-    };
-
-    fetchUsers();
+    setUsers(excludedFolderOwnerUsers);
   }, [folders]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   const openDialog = (folderId: string) => {
     setSelectedFolderId(folderId);
@@ -115,6 +117,7 @@ export const FolderList = ({
             folder={folder}
             onOpenShareDialog={openDialog}
             isEditable={areFoldersEditable}
+            loadFolders={loadFolders}
           />
         ))}
       </div>

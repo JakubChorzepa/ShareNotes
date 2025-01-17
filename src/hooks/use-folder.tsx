@@ -8,23 +8,53 @@ interface Folder {
 
 export const useFolder = (folderId: string) => {
   const [folder, setFolder] = useState<Folder | null>();
-  const [error, setError] = useState<string | null>();
+  const [error, setError] = useState<string | undefined>();
   const [password, setPassword] = useState<string>('');
   const [isPasswordRequired, setIsPasswordRequired] = useState<boolean>(false);
   const [accessGranted, setAccessGranted] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const FOLDER_URL = `/api/folders/${folderId}`;
 
   useEffect(() => {
     const fetchFolder = async () => {
-      const response = await fetch(FOLDER_URL);
-      const data = await response.json();
+      setIsLoading(true);
+      setError(undefined);
 
-      if (response.status === 200) {
-        setFolder(data);
-        setIsPasswordRequired(!!data.password);
-      } else {
-        setError(data.error);
+      try {
+        const response = await fetch(FOLDER_URL);
+        const data = await response.json();
+
+        if (response.ok) {
+          setFolder(data);
+          setIsPasswordRequired(!!data.password);
+        } else
+          switch (response.status) {
+            case 401: {
+              setIsPasswordRequired(true);
+              setError('Folder wymaga hasła.');
+
+              break;
+            }
+            case 403: {
+              setError('Brak dostępu do folderu.');
+
+              break;
+            }
+            case 404: {
+              setError('Folder nie został znaleziony.');
+
+              break;
+            }
+            default: {
+              setError('Wystąpił nieoczekiwany błąd.');
+            }
+          }
+      } catch (error) {
+        setError('Wystąpił błąd podczas łączenia z serwerem.');
+        console.error('Error fetching folder:', error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -33,21 +63,34 @@ export const useFolder = (folderId: string) => {
 
   const handlePasswordSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setError(undefined);
+    setIsLoading(true);
 
-    const response = await fetch(`/api/folders/${folderId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ password }),
-    });
+    try {
+      const response = await fetch(`/api/folders/${folderId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password }),
+      });
 
-    const data = await response.json();
+      const data = await response.json();
 
-    if (response.status === 200) {
-      setAccessGranted(true);
-    } else {
-      setError(data.error || 'Invalid password');
+      if (response.ok) {
+        setAccessGranted(true);
+        setFolder(data); // Jeśli API zwraca dane folderu po weryfikacji hasła
+        setError(undefined);
+      } else if (response.status === 403) {
+        setError('Nieprawidłowe hasło.');
+      } else {
+        setError('Wystąpił nieoczekiwany błąd podczas weryfikacji hasła.');
+      }
+    } catch (error) {
+      setError('Wystąpił błąd podczas łączenia z serwerem.');
+      console.error('Error submitting password:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,6 +101,7 @@ export const useFolder = (folderId: string) => {
     setPassword,
     isPasswordRequired,
     accessGranted,
+    isLoading,
     handlePasswordSubmit,
   };
 };

@@ -20,7 +20,24 @@ function FolderPage() {
     handlePasswordSubmit,
   } = useFolder(params.folderId);
 
-  console.log(folder);
+  console.log(accessGranted);
+
+  if (!accessGranted && !isPasswordRequired) {
+    return (
+      <div>
+        Nie posiadasz dostępu do tego folderu, poproś właściciela o jego
+        uzyskanie
+      </div>
+    );
+  }
+
+  if (isPasswordRequired) {
+    return (
+      <div className="flex items-center justify-center">
+        Dostęp do folderu zabezpieczony jest hasłem
+      </div>
+    );
+  }
 
   return (
     <div className="flex justify-center text-lg">

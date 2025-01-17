@@ -4,9 +4,9 @@ import { RefreshCw } from 'lucide-react';
 import { useEffect } from 'react';
 
 import { FolderList } from '@/components/Folders/folders-list';
+import { NewFolderDialog } from '@/components/Folders/NewFolderDialog/new-folder-dialog';
 import { Button } from '@/components/ui/button';
 import { useFolders } from '@/hooks/use-folders';
-import { NewFolderDialog } from '@/components/Folders/NewFolderDialog/new-folder-dialog';
 
 function OwnedFoldersPage() {
   const { folders, isLoading, error, loadFolders, addFolder } = useFolders(
@@ -35,6 +35,7 @@ function OwnedFoldersPage() {
         isLoading={isLoading}
         error={error}
         areFoldersEditable
+        loadFolders={loadFolders}
       />
     </div>
   );

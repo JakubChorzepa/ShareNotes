@@ -32,6 +32,7 @@ function SharedFoldersPage() {
         isLoading={isLoading}
         error={error}
         areFoldersEditable={false}
+        loadFolders={loadFolders}
       />
     </div>
   );

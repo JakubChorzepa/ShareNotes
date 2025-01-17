@@ -70,16 +70,49 @@ export const NewFolderDialogForm = ({ onSubmit }: NewFolderDialogFormProps) => {
         </label>
       </div>
       {isPasswordProtected && (
-        <div>
-          <Input
-            type="password"
-            placeholder="Hasło"
-            {...register('password')}
+        <>
+          <Controller
+            name="password"
+            control={control}
+            render={({ field }) => (
+              <div className="flex flex-col">
+                <label htmlFor="password">Hasło</label>
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Wpisz hasło"
+                  {...field}
+                />
+                {errors.password && (
+                  <p className="text-sm text-red-500">
+                    {errors.password.message}
+                  </p>
+                )}
+              </div>
+            )}
           />
-          {errors.password && (
-            <p className="text-sm text-red-500">{errors.password.message}</p>
-          )}
-        </div>
+
+          <Controller
+            name="confirmPassword"
+            control={control}
+            render={({ field }) => (
+              <div className="flex flex-col">
+                <label htmlFor="confirmPassword">Potwierdź hasło</label>
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="Potwierdź hasło"
+                  {...field}
+                />
+                {errors.confirmPassword && (
+                  <p className="text-sm text-red-500">
+                    {errors.confirmPassword.message}
+                  </p>
+                )}
+              </div>
+            )}
+          />
+        </>
       )}
       <div className="flex justify-center gap-2">
         <Button type="submit">Dodaj</Button>

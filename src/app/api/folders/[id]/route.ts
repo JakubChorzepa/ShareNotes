@@ -41,6 +41,14 @@ export async function GET(
     return NextResponse.json({ error: 'Access denied' }, { status: 403 });
   }
 
+  // Folder is protected by a password
+  if (folder.password) {
+    return NextResponse.json(
+      { error: 'Folder requires a password' },
+      { status: 401 },
+    );
+  }
+
   return NextResponse.json(folder, { status: 200 });
 }
 
