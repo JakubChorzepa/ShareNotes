@@ -24,7 +24,7 @@ export async function GET(
           user: true,
         },
       },
-      notes: true,
+      notes: true, // Dołączyć notatki do folderu
     },
   });
 
@@ -41,7 +41,6 @@ export async function GET(
     return NextResponse.json({ error: 'Access denied' }, { status: 403 });
   }
 
-  // Folder is protected by a password
   if (folder.password) {
     return NextResponse.json(
       { error: 'Folder requires a password' },
@@ -49,7 +48,7 @@ export async function GET(
     );
   }
 
-  return NextResponse.json(folder, { status: 200 });
+  return NextResponse.json(folder, { status: 200 }); // Zwracamy folder wraz z notatkami
 }
 
 export async function POST(
@@ -66,6 +65,15 @@ export async function POST(
   const { password } = await request.json();
   const folder = await prisma.folder.findUnique({
     where: { id: folderId },
+    include: {
+      owner: true,
+      sharedUsers: {
+        include: {
+          user: true,
+        },
+      },
+      notes: true, // Dołączyć notatki do folderu
+    },
   });
 
   if (!folder || !folder.password) {
@@ -81,5 +89,5 @@ export async function POST(
     return NextResponse.json({ error: 'Invalid password' }, { status: 403 });
   }
 
-  return NextResponse.json({ message: 'Access granted' }, { status: 200 });
+  return NextResponse.json(folder, { status: 200 });
 }

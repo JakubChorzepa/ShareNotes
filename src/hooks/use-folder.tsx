@@ -1,18 +1,17 @@
+import { Folder, Note } from '@prisma/client';
 import { useEffect, useState } from 'react';
 
-interface Folder {
-  id: string;
-  name: string;
-  password?: string;
-}
+type FolderWithNotes = Folder & {
+  notes: Note[];
+};
 
 export const useFolder = (folderId: string) => {
-  const [folder, setFolder] = useState<Folder | null>();
+  const [folder, setFolder] = useState<FolderWithNotes | null>();
   const [error, setError] = useState<string | undefined>();
   const [password, setPassword] = useState<string>('');
-  const [isPasswordRequired, setIsPasswordRequired] = useState<boolean>(false);
+  const [isPasswordRequired, setIsPasswordRequired] = useState<boolean>();
   const [accessGranted, setAccessGranted] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const FOLDER_URL = `/api/folders/${folderId}`;
 
@@ -27,22 +26,11 @@ export const useFolder = (folderId: string) => {
 
         if (response.ok) {
           setFolder(data);
-          setIsPasswordRequired(!!data.password);
+          setAccessGranted(true);
         } else
           switch (response.status) {
             case 401: {
               setIsPasswordRequired(true);
-              setError('Folder wymaga hasła.');
-
-              break;
-            }
-            case 403: {
-              setError('Brak dostępu do folderu.');
-
-              break;
-            }
-            case 404: {
-              setError('Folder nie został znaleziony.');
 
               break;
             }
@@ -51,7 +39,6 @@ export const useFolder = (folderId: string) => {
             }
           }
       } catch (error) {
-        setError('Wystąpił błąd podczas łączenia z serwerem.');
         console.error('Error fetching folder:', error);
       } finally {
         setIsLoading(false);
@@ -79,10 +66,10 @@ export const useFolder = (folderId: string) => {
 
       if (response.ok) {
         setAccessGranted(true);
-        setFolder(data); // Jeśli API zwraca dane folderu po weryfikacji hasła
+        setFolder(data);
         setError(undefined);
       } else if (response.status === 403) {
-        setError('Nieprawidłowe hasło.');
+        setError('Nieprawidłowe hasło, spróbuj ponownie');
       } else {
         setError('Wystąpił nieoczekiwany błąd podczas weryfikacji hasła.');
       }

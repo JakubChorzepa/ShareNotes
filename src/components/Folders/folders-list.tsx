@@ -95,11 +95,8 @@ export const FolderList = ({
         <Frown className="h-12 w-12" />
         <div className="flex flex-col gap-2">
           <h1 className="md:text-xl">
-            Wygląda na to, że nie masz jeszcze żadnych folderów
+            Wygląda na to, że nie ma tu żadnych folderów do wyświetlenia
           </h1>
-          <p className="text-sm text-foreground">
-            Dodaj nowy folder, aby móc przechowywać swoje pliki
-          </p>
         </div>
       </div>
     );
