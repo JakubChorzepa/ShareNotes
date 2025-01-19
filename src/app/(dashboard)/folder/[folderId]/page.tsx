@@ -5,7 +5,8 @@ import { ArrowLeft as BackIcon, RefreshCcw } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 
-import { AddNoteDialog } from '@/components/AddNoteDialog/add-note-dialog';
+import { AddNoteDialog } from '@/components/Notes/AddNoteDialog/add-note-dialog';
+import NotesTable from '@/components/Notes/NotesTable/notes-table';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useFolder } from '@/hooks/use-folder';
@@ -25,15 +26,6 @@ const BackButton = () => {
   );
 };
 
-const RefreshButton = () => {
-  return (
-    <Button onClick={() => {}} variant={'outline'}>
-      <RefreshCcw className="mr-2 h-4 w-4" />
-      Odśwież
-    </Button>
-  );
-};
-
 function FolderPage() {
   const params = useParams<FolderPageParams>();
 
@@ -46,10 +38,14 @@ function FolderPage() {
     accessGranted,
     isLoading,
     handlePasswordSubmit,
+    refreshNotes,
+    notes,
   } = useFolder(params.folderId);
 
   const router = useRouter();
   const { user } = useUser();
+
+  const isOwner = !!user && !!folder && user.id === folder.ownerId;
 
   if (!user) {
     return (
@@ -129,14 +125,25 @@ function FolderPage() {
           </Button>
           <h1 className="text-xl font-bold md:text-2xl">{folder.name}</h1>
           <div className="flex gap-2">
-            {user.id === folder.ownerId && (
-              <AddNoteDialog folderId={params.folderId} />
-            )}
-            <RefreshButton />
+            {isOwner && <AddNoteDialog folderId={params.folderId} />}
           </div>
         </div>
-        <div>
-          <p>Liczba notatek: {folder.notes.length}</p>
+        <div className="flex flex-col gap-5">
+          <div className="flex flex-col md:flex-row md:justify-between">
+            <h1 className="text-lg font-semibold">
+              Notatki zawarte w folderze:
+            </h1>
+            <Button onClick={() => refreshNotes()} variant={'outline'}>
+              <RefreshCcw className="mr-2 h-4 w-4" />
+              Odśwież
+            </Button>
+          </div>
+
+          <NotesTable
+            notes={notes}
+            isOwner={isOwner}
+            refreshNotes={refreshNotes}
+          />
         </div>
       </div>
     );
