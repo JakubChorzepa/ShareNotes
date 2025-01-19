@@ -24,7 +24,7 @@ export async function GET(
           user: true,
         },
       },
-      notes: true, // Dołączyć notatki do folderu
+      notes: true,
     },
   });
 
@@ -48,7 +48,7 @@ export async function GET(
     );
   }
 
-  return NextResponse.json(folder, { status: 200 }); // Zwracamy folder wraz z notatkami
+  return NextResponse.json(folder, { status: 200 });
 }
 
 export async function POST(
@@ -72,7 +72,7 @@ export async function POST(
           user: true,
         },
       },
-      notes: true, // Dołączyć notatki do folderu
+      notes: true,
     },
   });
 
