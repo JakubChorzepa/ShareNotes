@@ -1,9 +1,11 @@
 'use client';
 
-import { ArrowLeft as BackIcon, Plus } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
+import { ArrowLeft as BackIcon, RefreshCcw } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import { FormEvent } from 'react';
 
+import { AddNoteDialog } from '@/components/AddNoteDialog/add-note-dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useFolder } from '@/hooks/use-folder';
@@ -23,6 +25,15 @@ const BackButton = () => {
   );
 };
 
+const RefreshButton = () => {
+  return (
+    <Button onClick={() => {}} variant={'outline'}>
+      <RefreshCcw className="mr-2 h-4 w-4" />
+      Odśwież
+    </Button>
+  );
+};
+
 function FolderPage() {
   const params = useParams<FolderPageParams>();
 
@@ -38,6 +49,20 @@ function FolderPage() {
   } = useFolder(params.folderId);
 
   const router = useRouter();
+  const { user } = useUser();
+
+  if (!user) {
+    return (
+      <div className="mt-2 flex flex-col gap-5">
+        <div>
+          <BackButton />
+        </div>
+        <div className="flex items-center justify-center">
+          Nie jesteś zalogowany. Zaloguj się, aby uzyskać dostęp do folderu.
+        </div>
+      </div>
+    );
+  }
 
   if (isLoading) {
     return (
@@ -103,9 +128,12 @@ function FolderPage() {
             Wróć
           </Button>
           <h1 className="text-xl font-bold md:text-2xl">{folder.name}</h1>
-          <Button>
-            Dodaj notatkę <Plus className="ml-2 h-4 w-4" />
-          </Button>
+          <div className="flex gap-2">
+            {user.id === folder.ownerId && (
+              <AddNoteDialog folderId={params.folderId} />
+            )}
+            <RefreshButton />
+          </div>
         </div>
         <div>
           <p>Liczba notatek: {folder.notes.length}</p>
