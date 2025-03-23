@@ -12,7 +12,7 @@ model Folder {
   name        String
   ownerId     String
   password    String?
-  owner       User            @relation("OwnedFolders", fields: [ownerId], references: [id])
+  owner       User            @relation("OwnedFolders", fields: [ownerId], references: [clerkUserId])
   sharedUsers FolderShare[]   @relation("SharedFolders")
   notes       Note[]          @relation("FolderNotes")
   createdAt   DateTime        @default(now())
@@ -20,10 +20,11 @@ model Folder {
 }
 
 model User {
-  id            String          @id @default(cuid())         
+  id            String          @id @default(cuid())   
+  avatarUrl     String      
   clerkUserId   String          @unique
   email         String          @unique
-  username      String?         @unique
+  username      String          @unique
   ownedFolders  Folder[]        @relation("OwnedFolders")
   sharedFolders FolderShare[]   @relation("SharedFolders")
   notes         Note[]          @relation("UserNotes")
@@ -37,7 +38,7 @@ model FolderShare {
   userId   String
 
   folder   Folder   @relation("SharedFolders", fields: [folderId], references: [id])
-  user     User     @relation("SharedFolders", fields: [userId], references: [id])
+  user     User     @relation("SharedFolders", fields: [userId], references: [clerkUserId])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -52,7 +53,7 @@ model Note {
   folderId    String?
   folder      Folder?  @relation("FolderNotes", fields: [folderId], references: [id])
   ownerId     String
-  owner       User     @relation("UserNotes", fields: [ownerId], references: [id])
+  owner       User     @relation("UserNotes", fields: [ownerId], references: [clerkUserId])
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }

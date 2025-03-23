@@ -1,3 +1,4 @@
+import { SignedOut, useUser } from '@clerk/nextjs';
 import { Folder, ShieldCheck, Users } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -28,7 +29,7 @@ export default function LandingPage() {
         </p>
         <div className="mt-10 flex gap-6">
           <Button variant="default" size="lg" asChild>
-            <Link href="/dashboard">Przejdź do aplikacji</Link>
+            <Link href="/owned-folders">Przejdź do aplikacji</Link>
           </Button>
         </div>
       </section>
@@ -135,9 +136,11 @@ export default function LandingPage() {
         <p className="mb-8 text-lg font-light">
           Dołącz już teraz i odkryj pełnię możliwości!
         </p>
-        <Button variant="ghost" className="bg-white text-blue-500">
-          <Link href="/sign-up">Zarejestruj się za darmo</Link>
-        </Button>
+        <SignedOut>
+          <Button variant="ghost" className="bg-white text-blue-500">
+            <Link href="/sign-up">Zarejestruj się za darmo</Link>
+          </Button>
+        </SignedOut>
       </section>
 
       {/* Sekcja Team */}
@@ -181,85 +184,6 @@ export default function LandingPage() {
             która ułatwi współpracę w grupach projektowych, zapewniając
             intuicyjne narzędzia do organizacji i wymiany wiedzy.
           </p>
-        </div>
-      </section>
-
-      {/* Sekcja Kontakt */}
-      <section className="bg-gray-100 px-6 py-20 sm:px-12">
-        <div className="container mx-auto text-center">
-          <h2 className="mb-8 text-4xl font-extrabold text-gray-900">
-            Skontaktuj się z nami
-          </h2>
-          <p className="mb-12 text-lg text-gray-600">
-            Masz pytania? Jesteśmy tutaj, aby pomóc. Wypełnij formularz poniżej,
-            a skontaktujemy się z Tobą jak najszybciej.
-          </p>
-
-          <form
-            action="#"
-            method="POST"
-            className="mx-auto max-w-2xl rounded-lg bg-white p-8 shadow-md"
-          >
-            <div className="mb-4">
-              <label
-                htmlFor="name"
-                className="block text-left text-lg text-gray-700"
-              >
-                Imię i nazwisko
-              </label>
-              <input
-                id="name"
-                name="name"
-                type="text"
-                required
-                className="mt-2 w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Wpisz swoje imię i nazwisko"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="email"
-                className="block text-left text-lg text-gray-700"
-              >
-                Adres e-mail
-              </label>
-              <input
-                id="email"
-                name="email"
-                type="email"
-                required
-                className="mt-2 w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Wpisz swój adres e-mail"
-              />
-            </div>
-
-            <div className="mb-4">
-              <label
-                htmlFor="message"
-                className="block text-left text-lg text-gray-700"
-              >
-                Twoja wiadomość
-              </label>
-              <textarea
-                id="message"
-                name="message"
-                required
-                rows={5}
-                className="mt-2 w-full rounded-lg border border-gray-300 p-3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Wpisz swoją wiadomość"
-              ></textarea>
-            </div>
-
-            <Button
-              variant="default"
-              size="lg"
-              type="submit"
-              className="mt-6 w-full"
-            >
-              Wyślij wiadomość
-            </Button>
-          </form>
         </div>
       </section>
 

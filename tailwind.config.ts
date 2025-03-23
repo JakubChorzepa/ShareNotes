@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
@@ -68,6 +69,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 };
 export default config;

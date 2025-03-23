@@ -1,15 +1,15 @@
-import { SignedIn, UserButton } from '@clerk/nextjs';
-import { currentUser } from '@clerk/nextjs/server';
+'use client';
+
 import { Folder, FolderGit2, Home, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -29,47 +29,51 @@ const sidebarRoutes: SidebarRoute[] = [
   },
   {
     title: 'Moje foldery',
-    url: '#',
+    url: '/owned-folders',
     icon: Folder,
   },
   {
     title: 'Udostepnione dla mnie',
-    url: '#',
+    url: '/shared-folders',
     icon: FolderGit2,
   },
 ];
 
-export async function AppSidebar() {
-  const user = await currentUser();
+export function AppSidebar() {
+  const pathname = usePathname();
 
   return (
     <Sidebar>
+      <SidebarHeader className="px-4 py-4 font-semibold">
+        ShareNotes
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>ShareNotes</SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {sidebarRoutes.map(sidebarRoute => (
-                <SidebarMenuItem key={sidebarRoute.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={sidebarRoute.url}>
-                      <sidebarRoute.icon />
-                      <span>{sidebarRoute.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+            <SidebarMenu className="gap-2">
+              {sidebarRoutes.map(route => {
+                const isActive = pathname === route.url;
+
+                return (
+                  <SidebarMenuItem key={route.title}>
+                    <SidebarMenuButton
+                      asChild
+                      className={`flex w-full items-center gap-2 rounded-md p-2 ${
+                        isActive ? 'bg-gray-200' : 'hover:bg-gray-100'
+                      }`}
+                    >
+                      <Link href={route.url}>
+                        <route.icon />
+                        <span>{route.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
-        <SignedIn>
-          <div className="flex h-full w-full flex-row content-center items-center gap-2 p-4">
-            <UserButton showName />
-          </div>
-        </SignedIn>
-      </SidebarFooter>
     </Sidebar>
   );
 }
